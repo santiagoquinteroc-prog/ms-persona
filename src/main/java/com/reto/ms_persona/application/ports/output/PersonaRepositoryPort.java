@@ -5,5 +5,7 @@ import reactor.core.publisher.Mono;
 
 public interface PersonaRepositoryPort {
     Mono<Persona> findById(Long id);
+    Mono<Persona> save(Persona persona);
+    Mono<Persona> findByCorreo(String correo);
 }
 

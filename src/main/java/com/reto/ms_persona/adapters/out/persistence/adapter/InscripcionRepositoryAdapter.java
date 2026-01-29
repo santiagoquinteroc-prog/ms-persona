@@ -6,6 +6,7 @@ import com.reto.ms_persona.application.ports.output.InscripcionRepositoryPort;
 import com.reto.ms_persona.domain.Inscripcion;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Component
@@ -24,6 +25,12 @@ public class InscripcionRepositoryAdapter implements InscripcionRepositoryPort {
     @Override
     public Mono<Boolean> existsByPersonaIdAndBootcampId(Long personaId, Long bootcampId) {
         return inscripcionR2dbcRepository.existsByPersonaIdAndBootcampId(personaId, bootcampId);
+    }
+
+    @Override
+    public Flux<Inscripcion> findByPersonaId(Long personaId) {
+        return inscripcionR2dbcRepository.findByPersonaId(personaId)
+                .map(this::toDomain);
     }
 
     private InscripcionEntity toEntity(Inscripcion inscripcion) {

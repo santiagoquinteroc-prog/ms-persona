@@ -20,6 +20,27 @@ public class PersonaRepositoryAdapter implements PersonaRepositoryPort {
                 .map(this::toDomain);
     }
 
+    @Override
+    public Mono<Persona> save(Persona persona) {
+        PersonaEntity entity = toEntity(persona);
+        return personaR2dbcRepository.save(entity)
+                .map(this::toDomain);
+    }
+
+    @Override
+    public Mono<Persona> findByCorreo(String correo) {
+        return personaR2dbcRepository.findByCorreo(correo)
+                .map(this::toDomain);
+    }
+
+    private PersonaEntity toEntity(Persona persona) {
+        return PersonaEntity.builder()
+                .id(persona.getId())
+                .nombre(persona.getNombre())
+                .correo(persona.getCorreo())
+                .build();
+    }
+
     private Persona toDomain(PersonaEntity entity) {
         return Persona.builder()
                 .id(entity.getId())

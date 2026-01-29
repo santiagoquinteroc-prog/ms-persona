@@ -8,5 +8,6 @@ import reactor.core.publisher.Mono;
 @Repository
 public interface PersonaR2dbcRepository extends ReactiveCrudRepository<PersonaEntity, Long> {
     Mono<PersonaEntity> findById(Long id);
+    Mono<PersonaEntity> findByCorreo(String correo);
 }
 

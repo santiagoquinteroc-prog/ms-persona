@@ -6,18 +6,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Inscripcion {
+public class BootcampInfo {
     private Long id;
-    private Long personaId;
-    private Long bootcampId;
-    private LocalDateTime fechaInscripcion;
-    private LocalDate fechaInicio;
-    private LocalDate fechaFin;
+    private LocalDate fechaLanzamiento;
+    private Integer duracionSemanas;
 }
 
