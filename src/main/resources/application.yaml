@@ -1,3 +1,16 @@
+server:
+  port: 8083
+
 spring:
   application:
     name: ms-persona
+  r2dbc:
+    url: r2dbc:mysql://localhost:3310/persona_db
+    username: app
+    password: app
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
