@@ -4,6 +4,7 @@ import com.reto.ms_persona.application.ports.input.InscribirPersonaUseCase;
 import com.reto.ms_persona.application.ports.output.BootcampServicePort;
 import com.reto.ms_persona.application.ports.output.InscripcionRepositoryPort;
 import com.reto.ms_persona.application.ports.output.PersonaRepositoryPort;
+import com.reto.ms_persona.application.ports.output.ReporteServicePort;
 import com.reto.ms_persona.domain.BootcampNoEncontradoException;
 import com.reto.ms_persona.domain.BootcampSolapadoException;
 import com.reto.ms_persona.domain.Inscripcion;
@@ -26,6 +27,7 @@ public class InscribirPersonaEnBootcampUseCase implements InscribirPersonaUseCas
     private final PersonaRepositoryPort personaRepositoryPort;
     private final InscripcionRepositoryPort inscripcionRepositoryPort;
     private final BootcampServicePort bootcampServicePort;
+    private final ReporteServicePort reporteServicePort;
 
     @Override
     public Mono<Inscripcion> ejecutar(Long personaId, Long bootcampId) {
@@ -68,7 +70,14 @@ public class InscribirPersonaEnBootcampUseCase implements InscribirPersonaUseCas
                                                                     .fechaFin(fechaFin)
                                                                     .build();
                                                             ReglasNegocio.validarInscripcion(nuevaInscripcion);
-                                                            return inscripcionRepositoryPort.save(nuevaInscripcion);
+                                                            return inscripcionRepositoryPort.save(nuevaInscripcion)
+                                                                    .doOnSuccess(inscripcionGuardada -> {
+                                                                        reporteServicePort.notificarInscripcion(
+                                                                                bootcampId,
+                                                                                persona.getNombre(),
+                                                                                persona.getCorreo()
+                                                                        ).subscribe();
+                                                                    });
                                                         });
                                             });
                                 })));

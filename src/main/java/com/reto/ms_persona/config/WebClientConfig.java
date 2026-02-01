@@ -11,10 +11,20 @@ public class WebClientConfig {
     @Value("${ms.bootcamp.url:http://localhost:8082}")
     private String bootcampBaseUrl;
 
+    @Value("${ms.reporte.url:http://localhost:8084}")
+    private String reporteBaseUrl;
+
     @Bean(name = "bootcampServiceWebClient")
     public WebClient bootcampServiceWebClient() {
         return WebClient.builder()
                 .baseUrl(bootcampBaseUrl)
+                .build();
+    }
+
+    @Bean(name = "reporteServiceWebClient")
+    public WebClient reporteServiceWebClient() {
+        return WebClient.builder()
+                .baseUrl(reporteBaseUrl)
                 .build();
     }
 }
