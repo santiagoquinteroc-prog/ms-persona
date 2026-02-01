@@ -6,6 +6,7 @@ import com.reto.ms_persona.application.ports.output.PersonaRepositoryPort;
 import com.reto.ms_persona.domain.Persona;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Component
@@ -30,6 +31,12 @@ public class PersonaRepositoryAdapter implements PersonaRepositoryPort {
     @Override
     public Mono<Persona> findByCorreo(String correo) {
         return personaR2dbcRepository.findByCorreo(correo)
+                .map(this::toDomain);
+    }
+
+    @Override
+    public Flux<Persona> findAll() {
+        return personaR2dbcRepository.findAll()
                 .map(this::toDomain);
     }
 
