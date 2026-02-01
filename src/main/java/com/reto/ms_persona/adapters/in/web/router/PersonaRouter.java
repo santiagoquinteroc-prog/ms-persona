@@ -32,6 +32,22 @@ public class PersonaRouter {
         @RouterOperation(
             path = "/personas",
             produces = {MediaType.APPLICATION_JSON_VALUE},
+            method = RequestMethod.GET,
+            beanClass = PersonaHandler.class,
+            beanMethod = "listarPersonas",
+            operation = @Operation(
+                operationId = "listarPersonas",
+                summary = "Listar personas",
+                tags = {"Personas"},
+                responses = {
+                    @ApiResponse(responseCode = "200", description = "OK",
+                        content = @Content(schema = @Schema(implementation = PersonaResponse.class, type = "array")))
+                }
+            )
+        ),
+        @RouterOperation(
+            path = "/personas",
+            produces = {MediaType.APPLICATION_JSON_VALUE},
             method = RequestMethod.POST,
             beanClass = PersonaHandler.class,
             beanMethod = "crearPersona",
@@ -94,7 +110,8 @@ public class PersonaRouter {
         )
     })
     public RouterFunction<ServerResponse> personaRoutes(PersonaHandler personaHandler) {
-        return RouterFunctions.route(POST("/personas").and(accept(org.springframework.http.MediaType.APPLICATION_JSON)), personaHandler::crearPersona)
+        return RouterFunctions.route(GET("/personas"), personaHandler::listarPersonas)
+                .andRoute(POST("/personas").and(accept(org.springframework.http.MediaType.APPLICATION_JSON)), personaHandler::crearPersona)
                 .andRoute(GET("/personas/{id}"), personaHandler::obtenerPersona)
                 .andRoute(POST("/personas/{personaId}/inscripciones").and(accept(org.springframework.http.MediaType.APPLICATION_JSON)), personaHandler::inscribirPersona);
     }

@@ -134,5 +134,19 @@ public class PersonaHandler {
                     .bodyValue("ID de persona inválido");
         }
     }
+
+    public Mono<ServerResponse> listarPersonas(ServerRequest request) {
+        return personaRepositoryPort.findAll()
+                .map(personaMapper::toResponse)
+                .collectList()
+                .flatMap(personas -> ServerResponse
+                        .status(HttpStatus.OK)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .bodyValue(personas))
+                .onErrorResume(error -> ServerResponse
+                        .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .bodyValue(error.getMessage()));
+    }
 }
 
